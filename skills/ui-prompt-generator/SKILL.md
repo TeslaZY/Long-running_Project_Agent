@@ -1,7 +1,6 @@
 ---
 name: ui-prompt-generator
 description: UI 提示词设计师：根据产品文档生成原型图提示词，支持 Midjourney、Gemini 等图像生成工具
-license: MI
 ---
 
 # UI 提示词设计师

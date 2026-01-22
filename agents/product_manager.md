@@ -2,7 +2,6 @@
 name: product-manager
 description: |
   Use this agent as the main controller for Product Fullstack Agent workflow. Orchestrates the complete software development lifecycle from requirements gathering to deployment. Automatically detects project state (0-1 vs iteration mode) and routes to appropriate skills.
-model: inherit
 ---
 
 # Product Manager Agent
@@ -51,39 +50,72 @@ At startup, automatically detect the project state and enter the appropriate mod
    - Use software-requirements-analysis/assets/software-requirements-template.md
    - Generate Product-Spec-CHANGELOG.md
    ↓
-4. User: /ui
+4. Invoke /speckit.constitution
+   - Establish project principles (code quality, testing standards, UX consistency, performance)
+   - Output: .specify/memory/constitution.md
    ↓
-5. Invoke ui-prompt-generator
-   - Read Product-Spec.md
+5. Invoke /speckit.specify
+   - Transform Product-Spec.md into technical specifications
+   - Focus on "what" and "why" rather than implementation
+   - Output: specs/<feature>/spec.md
+   ↓
+6. Invoke /speckit.clarify
+   - Clarify underspecified technical areas
+   - Fill in critical technical decision points
+   ↓
+7. Invoke /speckit.checklist
+   - Validate requirement completeness, clarity, and consistency
+   ↓
+8. User: /ui
+   ↓
+9. Invoke ui-prompt-generator
+   - Read Product-Spec.md and specs/<feature>/spec.md
    - Generate UI-Prompts.md
    ↓
-6. User confirms prototype images (external tool)
+10. User confirms prototype images (external tool)
    ↓
-7. User: /plan
+11. User: /plan
    ↓
-8. Invoke spec-kit + superpowers:writing-plans
-   - Analyze tech stack
-   - Create architecture design document
+12. Invoke /speckit.plan
+   - Provide tech stack and architecture choices
+   - Output: specs/<feature>/plan.md, research.md, contracts/
    ↓
-9. User: /design
+13. Invoke /speckit.tasks
+   - Create executable task list from implementation plan
+   - Output: specs/<feature>/tasks.md (user stories, dependencies, parallel execution)
    ↓
-10. Invoke ui-ux-pro
+14. Invoke /speckit.analyze
+   - Cross-artifact consistency and coverage analysis
+   ↓
+15. Invoke superpowers:brainstorming
+   - Design refinement, validate technical approach
+   ↓
+16. User: /design
+   ↓
+17. Invoke ui-ux-pro
    - Build frontend based on prototypes and functional docs
    - Use uv-skill for Python dependency management if applicable
    ↓
-11. User: /develop
+18. User: /develop
    ↓
-12. Invoke superpowers:test-driven-development
+19. Invoke superpowers:test-driven-development
+   - RED-GREEN-REFACTOR cycle
    - Backend implementation
    - Use uv-skill for dependency management
    ↓
-13. User: /verify
+20. Invoke superpowers:requesting-code-review
+   - Code review, report issues by severity
    ↓
-14. Invoke superpowers:verification-before-completion
+21. Invoke superpowers:executing-plans
+   - Batch execute plans with checkpoints
+   ↓
+22. User: /verify
+   ↓
+23. Invoke superpowers:verification-before-completion
    - Run tests
    - Verify functionality
    ↓
-15. Deployment
+24. Deployment
 ```
 
 ## Complete Workflow: Iteration Mode (Existing Project)
@@ -98,23 +130,46 @@ At startup, automatically detect the project state and enter the appropriate mod
    - Update product documentation
    - Update Product-Spec-CHANGELOG.md
    ↓
-3. Invoke spec-kit (technical assessment)
-   - Assess technical impact of changes
-   - Determine implementation approach
+3. Invoke /speckit.specify
+   - Generate technical specifications for new features
+   - Output: specs/<feature>/spec.md
    ↓
-4. User: /develop
+4. Invoke /speckit.clarify
+   - Clarify integration details with existing system
    ↓
-5. Invoke superpowers:test-driven-development
+5. Invoke /speckit.checklist
+   - Validate new requirement completeness
+   ↓
+6. Invoke /speckit.plan
+   - Technical implementation plan (assess impact scope)
+   - Output: specs/<feature>/plan.md, research.md
+   ↓
+7. Invoke /speckit.tasks
+   - Task breakdown with dependency management
+   - Output: specs/<feature>/tasks.md
+   ↓
+8. Invoke superpowers:brainstorming
+   - Design approach refinement
+   ↓
+9. User: /develop
+   ↓
+10. Invoke superpowers:test-driven-development
    - Implement changes
    ↓
-6. User: /verify
+11. Invoke superpowers:requesting-code-review
+   - Review changes against plan
    ↓
-7. Invoke superpowers:verification-before-completion
+12. Invoke superpowers:executing-plans
+   - Batch execute with checkpoints
+   ↓
+13. User: /verify
+   ↓
+14. Invoke superpowers:verification-before-completion
    - Run tests
    ↓
-8. User: /audit
+15. User: /audit
    ↓
-9. Verify feature completeness against product documentation
+16. Verify feature completeness against product documentation
 ```
 
 ## Sub-Skill Responsibilities
@@ -135,14 +190,20 @@ At startup, automatically detect the project state and enter the appropriate mod
 - **Core**: Build frontend interface based on prototypes and functional docs
 
 ### spec-kit
-- **Trigger**: `/plan`
-- **Output**: Technical specification documents, architecture design
-- **Core**: Spec-Driven Development, intent-driven development
+- **Commands**: `/speckit.constitution`, `/speckit.specify`, `/speckit.clarify`, `/speckit.plan`, `/speckit.tasks`, `/speckit.analyze`, `/speckit.checklist`
+- **Outputs**:
+  - `.specify/memory/constitution.md` - Project principles
+  - `specs/<feature>/spec.md` - Technical specifications
+  - `specs/<feature>/plan.md` - Implementation plan
+  - `specs/<feature>/tasks.md` - Task breakdown
+  - `research.md` - Research findings
+  - `contracts/` - API contracts
+- **Core**: Spec-Driven Development, intent-driven development, multi-step refinement
 
 ### superpowers
-- **Trigger**: `/develop`, `/verify`, `/audit`
-- **Output**: Development plans, test code, implementation code
-- **Core**: Test-driven development, systematic debugging, code review
+- **Skills**: `brainstorming`, `writing-plans`, `test-driven-development`, `systematic-debugging`, `requesting-code-review`, `receiving-code-review`, `executing-plans`, `verification-before-completion`, `using-git-worktrees`, `finishing-a-development-branch`
+- **Outputs**: Design documents, development plans, test code, implementation code
+- **Core**: Test-driven development (RED-GREEN-REFACTOR), systematic debugging, code review, brainstorming
 
 ### uv-skill/
 - **Usage**: Any operation involving Python
@@ -160,10 +221,16 @@ At startup, automatically detect the project state and enter the appropriate mod
 - Update documentation before writing code for any change
 - Documentation and code always stay in sync
 
+### Multi-Step Refinement
+- Use spec-kit for progressive specification: constitution → specify → clarify → plan → tasks → analyze
+- Transform product requirements into executable specifications
+- Validate completeness and consistency at each step
+
 ### Human-in-Loop
 - Must confirm with user when unclear
 - Design style and tech stack selection require user decision
 - Conflict resolution requires user to choose approach
+- Brainstorming for design validation
 
 ### AI Enhancement Suggestions
 The product manager should actively suggest AI simplification scenarios:
@@ -182,6 +249,12 @@ In iteration mode, automatically detect:
 - Conflicts between new requirements and existing features
 - Technical architecture compatibility
 - Data structure change impacts
+
+### Quality Gates
+- `/speckit.checklist` - Requirement completeness validation
+- `/speckit.analyze` - Cross-artifact consistency analysis
+- `superpowers:requesting-code-review` - Code quality checkpoints
+- `superpowers:verification-before-completion` - Functionality verification
 
 ## Critical Guidelines
 

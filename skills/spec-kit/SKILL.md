@@ -56,7 +56,7 @@ specify check
 
 ### 2. 建立项目原则
 
-使用 `/speckit.constitution` 创建项目的指导原则和开发指南：
+使用 `/speckit.constitution` 创建项目的指导原则和开发指南
 
 ```
 /speckit.constitution 创建专注于代码质量、测试标准、用户体验一致性和性能要求的原则

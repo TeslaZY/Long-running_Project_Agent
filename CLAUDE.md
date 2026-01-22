@@ -85,18 +85,27 @@ product-manager-agent/
 1. 用户: /new 或说出想法
 2. 调用 software-requirements-analysis（需求收集）
 3. 生成 Product-Spec.md 和 Product-Spec-CHANGELOG.md
-4. 用户: /ui
-5. 调用 ui-prompt-generator（生成 UI 提示词）
-6. 用户确认原型图（外部工具生成）
-7. 用户: /plan
-8. 调用 spec-kit + superpowers:writing-plans（技术方案）
-9. 用户: /design
-10. 调用 ui-ux-pro（前端开发）
-11. 用户: /develop
-12. 调用 superpowers:test-driven-development（后端开发）
-13. 用户: /verify
-14. 调用 superpowers:verification-before-completion（测试验证）
-15. 部署上线
+4. 调用 /speckit.constitution（建立项目原则）
+5. 调用 /speckit.specify（生成技术规范）
+6. 调用 /speckit.clarify（澄清技术细节）
+7. 调用 /speckit.checklist（验证需求完整性）
+8. 用户: /ui
+9. 调用 ui-prompt-generator（生成 UI 提示词）
+10. 用户确认原型图（外部工具生成）
+11. 用户: /plan
+12. 调用 /speckit.plan（技术实施计划）
+13. 调用 /speckit.tasks（任务分解）
+14. 调用 /speckit.analyze（一致性分析）
+15. 调用 superpowers:brainstorming（设计细化）
+16. 用户: /design
+17. 调用 ui-ux-pro（前端开发）
+18. 用户: /develop
+19. 调用 superpowers:test-driven-development（后端开发）
+20. 调用 superpowers:requesting-code-review（代码审查）
+21. 调用 superpowers:executing-plans（批量执行）
+22. 用户: /verify
+23. 调用 superpowers:verification-before-completion（测试验证）
+24. 部署上线
 ```
 
 ### 迭代模式（修改现有项目）
@@ -104,23 +113,30 @@ product-manager-agent/
 ```
 1. 用户: /feature <描述> 或 /update <描述>
 2. 调用 software-requirements-analysis（迭代模式 - 需求更新）
-3. 调用 spec-kit（技术评估）
-4. 用户: /develop
-5. 调用 superpowers:test-driven-development（实现变更）
-6. 用户: /verify
-7. 调用 superpowers:verification-before-completion（运行测试）
-8. 用户: /audit（验收检查）
+3. 调用 /speckit.specify（新功能技术规范）
+4. 调用 /speckit.clarify（集成细节澄清）
+5. 调用 /speckit.checklist（需求完整性验证）
+6. 调用 /speckit.plan（技术实施计划）
+7. 调用 /speckit.tasks（任务分解）
+8. 调用 superpowers:brainstorming（设计细化）
+9. 用户: /develop
+10. 调用 superpowers:test-driven-development（实现变更）
+11. 调用 superpowers:requesting-code-review（代码审查）
+12. 调用 superpowers:executing-plans（批量执行）
+13. 用户: /verify
+14. 调用 superpowers:verification-before-completion（运行测试）
+15. 用户: /audit（验收检查）
 ```
 
 ## 子技能说明
 
-| 技能 | 触发命令 | 输出 |
-|------|----------|------|
+| 技能 | 触发命令/技能 | 输出 |
+|------|---------------|------|
 | `software-requirements-analysis` | `/new`, `/feature`, `/update` | `Product-Spec.md`, `Product-Spec-CHANGELOG.md` |
 | `ui-prompt-generator` | `/ui` | `UI-Prompts.md` |
 | `ui-ux-pro` | `/design` | 前端代码项目 |
-| `spec-kit` | `/plan` | 技术规范文档、架构设计 |
-| `superpowers` | `/develop`, `/verify`, `/audit` | 开发计划、测试代码、实现代码 |
+| `spec-kit` | `/speckit.constitution`, `/speckit.specify`, `/speckit.clarify`, `/speckit.plan`, `/speckit.tasks`, `/speckit.analyze`, `/speckit.checklist` | `.specify/memory/constitution.md`, `specs/<feature>/spec.md`, `specs/<feature>/plan.md`, `specs/<feature>/tasks.md`, `research.md`, `contracts/` |
+| `superpowers` | `brainstorming`, `writing-plans`, `test-driven-development`, `systematic-debugging`, `requesting-code-review`, `executing-plans`, `verification-before-completion` | 设计文档、开发计划、测试代码、实现代码 |
 | `uv-skill` | Python 操作时自动使用 | `pyproject.toml`, `uv.lock`, `.venv/` |
 
 ## 注意事项

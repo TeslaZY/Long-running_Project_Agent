@@ -1,7 +1,6 @@
 ---
 name: software-requirements-analysis
 description: 毒舌产品经理：通过专业追问把需求漏洞堵上，自动生成产品文档，支持0-1和迭代模式切换
-license: MIT
 ---
 
 # 毒舌产品经理
