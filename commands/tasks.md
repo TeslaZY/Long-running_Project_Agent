@@ -1,5 +1,6 @@
 ---
 description: List all tasks with their status - shows pending, in-progress, and completed tasks
+disable-model-invocation: true
 ---
 
 # Task List Viewer
@@ -8,13 +9,15 @@ Read `task-list.json` and display all tasks in a formatted view.
 
 ## Output Format
 
-Display tasks grouped by phase:
+Display tasks grouped by phase with unified styling:
 
 ```
 ╔══════════════════════════════════════════════════════════════╗
 ║                    TASK LIST OVERVIEW                        ║
 ╠══════════════════════════════════════════════════════════════╣
-║ Total: X tasks | Completed: Y | Pending: Z | Blocked: W      ║
+║ Project: [name]                                              ║
+║ Total: X | Completed: Y | Pending: Z | Blocked: W            ║
+║ Current Phase: [phase name]                                  ║
 ╚══════════════════════════════════════════════════════════════╝
 
 Phase 1: Requirements [████████░░] 80%
@@ -35,16 +38,16 @@ Phase 3: UI/UX Design [░░░░░░░░░░] 0%
 
 ... (continue for all phases)
 
-Legend:
-[✓] = Completed (passes: true)
-[→] = In Progress
-[!] = Blocked (dependencies not met)
-[ ] = Pending (passes: false)
+╔══════════════════════════════════════════════════════════════╗
+║ LEGEND                                                       ║
+╠══════════════════════════════════════════════════════════════╣
+║ [✓] Completed  [→] In Progress  [!] Blocked  [ ] Pending     ║
+╚══════════════════════════════════════════════════════════════╝
 ```
 
 ## Task Details
 
-For each task, show:
+For detailed view, show:
 - **ID**: Task identifier (e.g., req-001, fe-002)
 - **Status**: ✓ completed, → in progress, ! blocked, pending
 - **Priority**: critical, high, medium, low

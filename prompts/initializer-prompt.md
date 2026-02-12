@@ -12,7 +12,24 @@ This plugin implements a complete software development lifecycle as a long-runni
 - Testing and verification
 - Code review and deployment
 
-### FIRST: Understand the Project Context
+### FIRST: Check Dependencies
+
+Before starting, verify the required tools are installed:
+
+```bash
+# Required
+git --version
+
+# Optional (Python projects)
+uv --version 2>/dev/null || echo "uv not installed"
+
+# Optional (spec-driven development)
+specify --version 2>/dev/null || echo "specify-cli not installed"
+```
+
+If critical dependencies are missing, inform the user and point to `DEPENDENCIES.md` for installation instructions.
+
+### SECOND: Understand the Project Context
 
 Start by checking the current project state:
 ```bash
@@ -26,7 +43,7 @@ ls -la
 ls Product-Spec.md 2>/dev/null && echo "ITERATION MODE" || echo "0-1 MODE"
 ```
 
-### CRITICAL FIRST TASK: Create task-list.json
+### THIRD: Create task-list.json
 
 Based on the project requirements, create or update `task-list.json` with detailed tasks for the entire software development lifecycle.
 
@@ -79,7 +96,7 @@ Based on the project requirements, create or update `task-list.json` with detail
 - Never remove tasks, never edit descriptions, never modify verification steps
 - This ensures no functionality is missed
 
-### SECOND TASK: Initialize Progress Tracking
+### FOURTH: Initialize Progress Tracking
 
 Create `agent-progress.md` using `templates/agent-progress-template.md`:
 
@@ -87,7 +104,7 @@ Create `agent-progress.md` using `templates/agent-progress-template.md`:
 2. Fill in initial session information
 3. Record current project state
 
-### THIRD TASK: Initialize Git (if not already)
+### FIFTH: Initialize Git (if not already)
 
 Ensure git repository is properly initialized:
 ```bash
@@ -103,7 +120,7 @@ Make your first commit with:
 
 Commit message: "Initial setup: task list and project structure for long-running development"
 
-### FOURTH TASK: Begin Requirements Phase
+### SIXTH: Begin Requirements Phase
 
 **If 0-1 Mode (no Product-Spec.md):**
 1. Invoke the `software-requirements-analysis` skill

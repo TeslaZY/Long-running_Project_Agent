@@ -67,15 +67,29 @@ cd /path/to/Long-running_Product_Agent
 /continue   - 继续执行下一任务（核心命令）
 /progress   - 查看当前项目进度
 /tasks      - 列出所有任务
-/redo <id>  - 重做指定任务
-/feature    - 添加新功能
-/update     - 修改现有功能
+/feature    - 添加新功能（会添加新任务到列表）
+/update     - 修改现有功能（会添加新任务到列表）
 /audit      - 验收检查
 ```
 
+### 安装依赖（推荐）
+
+运行依赖安装脚本：
+
+```bash
+./scripts/install-deps.sh
+```
+
+这会引导你安装：
+- **必需**：Git
+- **可选**：uv（Python 包管理器）、specify-cli（规格驱动开发）
+- **插件**：superpowers（开发工作流）、ui-ux-pro（UI 设计）
+
+详见 [DEPENDENCIES.md](DEPENDENCIES.md)
+
 ## 可用命令（精简版）
 
-**只有 8 个命令：**
+**只有 7 个命令：**
 
 | 命令 | 描述 | 使用时机 |
 |------|------|----------|
@@ -83,12 +97,13 @@ cd /path/to/Long-running_Product_Agent
 | `/continue` | **核心命令** - 继续执行下一任务 | 每个后续会话 |
 | `/progress` | 查看当前项目进度 | 了解状态 |
 | `/tasks` | 列出所有任务和状态 | 查看任务列表 |
-| `/redo <task-id>` | 重做指定任务 | 需要重新实现时 |
-| `/feature <描述>` | 添加新功能 | 迭代模式 |
-| `/update <描述>` | 修改现有功能 | 迭代模式 |
+| `/feature <描述>` | 添加新功能（会添加新任务到列表） | 迭代模式 |
+| `/update <描述>` | 修改现有功能（会添加新任务到列表） | 迭代模式 |
 | `/audit` | 对照产品文档检查功能完整性 | 部署前验收 |
 
 **设计理念：** 用户不需要知道当前在哪个阶段（UI、开发、测试等），只需要 `/continue` 让 Agent 自动执行下一任务。
+
+**关于修改已完成任务：** 遵循 Long-Running 原则，不直接修改/重做已完成任务。如需修改，使用 `/feature` 或 `/update` 添加新任务到列表。
 
 ## 工作流程
 
@@ -112,24 +127,16 @@ cd /path/to/Long-running_Product_Agent
 ### 迭代模式（修改现有项目）
 
 ```bash
-# 1. 添加/修改功能
+# 1. 添加/修改功能（会自动添加新任务到列表）
 /feature 添加用户个人资料页面
+# 或
+/update 修改登录流程
 
 # 2. 继续开发
 /continue
 
 # 3. 验收
 /audit
-```
-
-### 重做任务
-
-```bash
-# 查看所有任务
-/tasks
-
-# 重做某个任务
-/redo fe-002
 ```
 
 ## 项目结构
@@ -145,12 +152,11 @@ Long-running_Product_Agent/
 ├── templates/                   # 模板
 │   ├── task-list-template.json  # 任务列表模板
 │   └── agent-progress-template.md
-├── commands/                    # 用户命令（8个）
+├── commands/                    # 用户命令（7个）
 │   ├── init.md
 │   ├── continue.md
 │   ├── progress.md
 │   ├── tasks.md
-│   ├── redo.md
 │   ├── feature.md
 │   ├── update.md
 │   └── audit.md
@@ -162,6 +168,11 @@ Long-running_Product_Agent/
 │   ├── spec-kit/
 │   ├── superpowers/
 │   └── uv-skill/
+├── scripts/                     # 实用脚本
+│   └── install-deps.sh          # 依赖安装脚本
+├── demo/                        # 示例和演示
+│   └── WORKFLOW_DEMO.md         # 工作流演示
+├── DEPENDENCIES.md              # 依赖说明
 ├── CLAUDE.md
 └── README.md
 ```

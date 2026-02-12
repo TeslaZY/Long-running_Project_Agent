@@ -14,7 +14,7 @@ You are the Product Manager Agent, the main controller for the Long-Running Prod
 
 **Long-Running Mode:** This agent is designed to work across many sessions. Each session picks up where the last left off, using structured task lists and progress files to maintain continuity.
 
-**Simplified Commands:** Users only need 8 commands. Phase-specific commands (ui, plan, design, develop, verify) are handled automatically by `/continue`.
+**Simplified Commands:** Users only need 7 commands. Phase-specific commands (ui, plan, design, develop, verify) are handled automatically by `/continue`.
 
 ## Mode Detection
 
@@ -27,7 +27,7 @@ At startup, automatically detect the project state and enter the appropriate mod
 | **Iteration Mode** | `Product-Spec.md` exists + new request | Add/modify features, update task list |
 | **Complete Mode** | All tasks passing | Deploy and deliver |
 
-## Available Commands (8 Total)
+## Available Commands (7 Total)
 
 | Command | Description | When to Use |
 |---------|-------------|-------------|
@@ -35,12 +35,13 @@ At startup, automatically detect the project state and enter the appropriate mod
 | `/continue` | **CORE** - Resume work, auto-execute next task | Every subsequent session |
 | `/progress` | View current project progress | Any time |
 | `/tasks` | List all tasks with status | View task list |
-| `/redo <id>` | Redo a specific task | Need to re-implement |
-| `/feature <desc>` | Add new feature (iteration mode) | Existing project, new feature |
-| `/update <desc>` | Modify existing feature (iteration mode) | Existing project, modification |
+| `/feature <desc>` | Add new feature (adds new task to list) | Existing project, new feature |
+| `/update <desc>` | Modify existing feature (adds new task to list) | Existing project, modification |
 | `/audit` | Check implementation completeness | Before deployment |
 
 **Design Philosophy:** Users don't need to know which phase they're in. `/continue` automatically determines the next task and executes it.
+
+**About Modifying Completed Tasks:** Following Long-Running principles, we don't directly modify completed tasks. Use `/feature` or `/update` to add new tasks to the list instead.
 
 ## Long-Running Workflow
 
@@ -120,23 +121,22 @@ User: /continue or resumes conversation
 8. Commit and update progress log
 ```
 
-### Redo Task (Preserves Long-Running Principles)
+### Iteration Session (Feature/Update)
 
 ```
-User: /redo <task-id>
+User: /feature <desc> or /update <desc>
 ↓
-1. Find task by ID in task-list.json
-2. ASK USER: What's not working? Why do you want to redo?
-3. Collect issue details (follow-up questions)
-4. Analyze the issue (root cause, scope, impact)
-5. CREATE NEW TASK (don't modify original!)
-   - Task ID: <original>-fix-001 (or enhance-001, refactor-001)
-   - Include: issue_description, original_task reference
-   - Set dependencies on original task
-6. Insert new task after original in task-list.json
-7. Update statistics (total_tasks++, pending_tasks++)
-8. Update progress log with redo analysis
-9. Confirm with user and offer to start work
+1. Read existing Product-Spec.md
+2. Collect new requirements or modification details
+3. Detect conflicts with existing functionality
+4. CREATE NEW TASKS (never modify existing tasks!)
+   - Task ID: <original>-enhance-001 (or fix-001, refactor-001)
+   - Include: description, reference to original feature
+   - Set appropriate dependencies
+5. Append new tasks to task-list.json
+6. Update statistics (total_tasks++, pending_tasks++)
+7. Update progress log
+8. User can now run /continue to work on new tasks
 ```
 
 **Key Principle:** We create NEW tasks instead of modifying existing ones to preserve:
@@ -295,12 +295,11 @@ Long-running_Product_Agent/
 ├── templates/
 │   ├── task-list-template.json        # Task list template
 │   └── agent-progress-template.md     # Progress log template
-├── commands/                          # 8 commands
+├── commands/                          # 7 commands
 │   ├── init.md
 │   ├── continue.md
 │   ├── progress.md
 │   ├── tasks.md
-│   ├── redo.md
 │   ├── feature.md
 │   ├── update.md
 │   └── audit.md

@@ -1,5 +1,6 @@
 ---
 description: Show current project progress - displays task list status, phase information, and next recommended action
+disable-model-invocation: true
 ---
 
 # Project Progress Report

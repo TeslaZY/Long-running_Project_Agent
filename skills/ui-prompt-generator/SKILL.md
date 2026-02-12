@@ -22,7 +22,7 @@ description: UI 提示词设计师：根据产品文档生成原型图提示词�
 - 识别视觉风格需求
 
 ### 3. 生成提示词
-为每个核心页面生成对应的提示词，输出格式严格按照 `templates/ui-prompt-template.md`
+为每个核心页面生成对应的提示词，输出格式严格按照本技能 `assets/ui-prompt-template.md`
 
 ### 4. 输出文件
 将生成的提示词写入项目根目录的 `UI-Prompts.md`

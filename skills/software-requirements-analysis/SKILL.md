@@ -78,7 +78,7 @@ description: 毒舌产品经理：通过专业追问把需求漏洞堵上，自�
 ## 输出规范
 
 ### 产品文档结构
-必须严格按照 `templates/product-spec-template.md` 的格式生成，包含：
+必须严格按照本技能 `assets/software-requirements-template.md` 的格式生成，包含：
 - 产品概述
 - 用户画像
 - 核心功能
@@ -87,7 +87,7 @@ description: 毒舌产品经理：通过专业追问把需求漏洞堵上，自�
 - 技术方向建议
 
 ### 变更记录结构
-必须严格按照 `templates/changelog-template.md` 的格式生成，记录：
+必须严格按照本技能 `assets/changelog-template.md` 的格式生成，记录：
 - 版本号（遵循语义化版本）
 - 变更日期
 - 变更类型（新增/修改/删除/修复）

@@ -138,9 +138,11 @@ to:
 
 **ONLY CHANGE "passes" FIELD AFTER VERIFICATION.**
 
-### STEP 9: UPDATE STATISTICS
+### STEP 9: UPDATE STATISTICS AND PHASE STATUS
 
-After changing task status, update the statistics in task-list.json:
+After changing task status, you MUST:
+
+1. **Update statistics** in task-list.json:
 ```json
 "statistics": {
   "total_tasks": X,
@@ -149,6 +151,22 @@ After changing task status, update the statistics in task-list.json:
   "pending_tasks": N,     // passes: false, not in_progress
   "blocked_tasks": M      // dependencies not satisfied
 }
+```
+
+2. **Update phase status** based on task completion:
+
+| Condition | Phase Status |
+|-----------|--------------|
+| All tasks in phase have `passes: true` | `completed` |
+| Any task in phase has `passes: true` OR first task started | `in_progress` |
+| No tasks started | `pending` |
+
+**Example transition logic:**
+```bash
+# After marking a task as passing, check the phase
+# If all tasks in phase are passing → phase.status = "completed"
+# If any task is passing but not all → phase.status = "in_progress"
+# If no tasks passing → phase.status = "pending"
 ```
 
 ### STEP 10: COMMIT YOUR PROGRESS

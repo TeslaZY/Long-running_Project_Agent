@@ -27,12 +27,11 @@ Long-running_Product_Agent/
 ├── templates/
 │   ├── task-list-template.json        # 任务列表模板
 │   └── agent-progress-template.md     # 进度日志模板
-├── commands/                           # 用户命令（8个）
+├── commands/                           # 用户命令（7个）
 │   ├── init.md                        # 初始化项目
 │   ├── continue.md                    # 继续工作（核心命令）
 │   ├── progress.md                    # 查看进度
 │   ├── tasks.md                       # 列出所有任务
-│   ├── redo.md                        # 重做指定任务
 │   ├── feature.md                     # 添加新功能
 │   ├── update.md                      # 修改功能
 │   └── audit.md                       # 验收检查
@@ -69,7 +68,7 @@ Long-running_Product_Agent/
 
 ## 可用命令（精简版）
 
-**只有 8 个命令：**
+**只有 7 个命令：**
 
 | 命令 | 描述 | 使用时机 |
 |------|------|----------|
@@ -77,12 +76,13 @@ Long-running_Product_Agent/
 | `/continue` | **核心命令** - 继续执行下一任务 | 每个后续会话 |
 | `/progress` | 查看当前项目进度 | 了解状态 |
 | `/tasks` | 列出所有任务和状态 | 查看任务列表 |
-| `/redo <task-id>` | 重做指定任务 | 需要重新实现 |
-| `/feature <描述>` | 添加新功能 | 迭代模式 |
-| `/update <描述>` | 修改现有功能 | 迭代模式 |
+| `/feature <描述>` | 添加新功能（会添加新任务到列表） | 迭代模式 |
+| `/update <描述>` | 修改现有功能（会添加新任务到列表） | 迭代模式 |
 | `/audit` | 对照产品文档检查功能完整性 | 部署前验收 |
 
 **设计理念：** 用户不需要知道当前在哪个阶段（UI、开发、测试等），只需要 `/continue` 让 Agent 自动执行下一任务。
+
+**关于修改已完成任务：** 遵循 Long-Running 原则，不直接修改/重做已完成任务。如需修改，使用 `/feature` 或 `/update` 添加新任务到列表。
 
 ## 会话协议（每个会话必须遵循）
 
@@ -133,17 +133,14 @@ Long-running_Product_Agent/
 /progress
 /tasks
 
-# 4. 重做某个任务（可选）
-/redo fe-002
-
-# 5. 部署前验收
+# 4. 部署前验收
 /audit
 ```
 
 ### 迭代模式（修改现有项目）
 
 ```bash
-# 1. 添加/修改功能
+# 1. 添加/修改功能（会自动添加新任务）
 /feature 添加用户个人资料页面
 # 或
 /update 修改登录流程
