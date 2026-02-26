@@ -44,7 +44,6 @@ Each session should record:
 - Task List: `task-list.json`
 - Product Spec: `Product-Spec.md`
 - Change Log: `Product-Spec-CHANGELOG.md`
-- Constitution: `.specify/memory/constitution.md`
 
 ### Git Branch
 - Branch: main

@@ -91,5 +91,3 @@ Watch for and address:
 - Scope creep → Gently suggest phasing
 - Unrealistic expectations → Reality check
 - Missing user perspective → Refocus on users
-ASSEOF
-echo "Created init-prompt.md"
